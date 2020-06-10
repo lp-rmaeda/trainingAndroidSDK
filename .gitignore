@@ -6,6 +6,11 @@ Icon
 # Thumbnails
 ._*
 
+# Android SDK
+
+.idea
+.gradle
+
 # Files that might appear in the root of a volume
 .DocumentRevisions-V100
 .fseventsd
