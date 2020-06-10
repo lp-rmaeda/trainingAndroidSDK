@@ -30,8 +30,8 @@ class MonitoringActivity : AppCompatActivity() {
     private var entryPoinstsEditText: EditText? = null
     private var engagementAttributesEditText: EditText? = null
 
-    var currentCampaignId : String? = null
-    var currentEngagementId : String? = null
+    var currentCampaignId : String? = "1197850970"
+    var currentEngagementId : String? = "1211876470"
     var currentSessionId : String? = ""
     var currentVisitorId : String? = ""
     var currentEngagementContextId : String? = ""
