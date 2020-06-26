@@ -9,6 +9,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.auth0.android.Auth0;
+import com.auth0.android.Auth0Exception;
+import com.auth0.android.provider.VoidCallback;
+import com.auth0.android.provider.WebAuthProvider;
 import com.liveperson.infra.InitLivePersonProperties;
 import com.liveperson.infra.MonitoringInitParams;
 import com.liveperson.infra.callbacks.InitLivePersonCallBack;
@@ -22,10 +26,15 @@ public class IntroActivity extends AppCompatActivity {
 	EditText mAccountIdEditText;
 	EditText mAppinstallidEditText;
 
+	private Auth0 auth0;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_intro);
+
+		auth0 = new Auth0(this);
+		auth0.setOIDCConformant(true);
 
 		mAccountIdEditText = findViewById(R.id.account_id_edit_text);
 		mAppinstallidEditText = findViewById(R.id.appinstallid_edit_text);
@@ -119,6 +128,22 @@ public class IntroActivity extends AppCompatActivity {
 		logoutButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+
+				if (auth0.isLoggingEnabled()) {
+					WebAuthProvider.logout(auth0)
+							.withScheme("demo")
+							.start(IntroActivity.this, new VoidCallback() {
+								@Override
+								public void onSuccess(Void payload) {
+
+								}
+
+								@Override
+								public void onFailure(Auth0Exception error) {
+
+								}
+							});
+				}
 
 				LivePerson.logOut(getApplicationContext(), SampleAppStorage.getInstance(IntroActivity.this).getAccount(), SampleAppStorage.SDK_SAMPLE_FCM_APP_ID,
 						new LogoutLivePersonCallback() {

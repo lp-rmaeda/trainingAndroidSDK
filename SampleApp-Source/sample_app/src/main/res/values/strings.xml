@@ -27,5 +27,7 @@
     <string name="lp_ttr_message_off_hours_time_zone_id"></string>
     <string name="logout_failed">Logout Failed!</string>
 
+    <string name="com_auth0_client_id">H1lgb5JC5pLuqTjNLY5U5P3duMiFul0I</string>
+    <string name="com_auth0_domain">rmaeda.au.auth0.com</string>
 
 </resources>

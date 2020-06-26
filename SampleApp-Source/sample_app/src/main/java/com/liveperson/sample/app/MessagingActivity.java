@@ -1,5 +1,6 @@
 package com.liveperson.sample.app;
 
+import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -20,9 +21,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.auth0.android.Auth0;
+import com.auth0.android.authentication.AuthenticationException;
+import com.auth0.android.provider.AuthCallback;
+import com.auth0.android.provider.ResponseType;
+import com.auth0.android.provider.WebAuthProvider;
+import com.auth0.android.result.Credentials;
 import com.liveperson.infra.CampaignInfo;
 import com.liveperson.infra.ConversationViewParams;
 import com.liveperson.infra.ICallback;
@@ -44,6 +52,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import static com.auth0.android.provider.ResponseType.*;
 
 
 /**
@@ -79,10 +89,15 @@ public class MessagingActivity extends AppCompatActivity {
 	private EditText mEngagementContextIdEditText;
 	private boolean isFromPush;
 
+	private Auth0 auth0;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_messaging);
+
+		auth0 = new Auth0(this);
+		auth0.setOIDCConformant(true);
 
 		initSampleAppViews();
 		initOpenConversationButton();
@@ -128,10 +143,12 @@ public class MessagingActivity extends AppCompatActivity {
 		mReadOnlyModeCheckBox = findViewById(R.id.check_box_read_only);
 
 		mCampaignIdEditText = findViewById(R.id.campaign_id);
-		mCampaignIdEditText.setText(getIntent().getStringExtra(CAMPAIGN_ID_KEY));
+		// mCampaignIdEditText.setText(getIntent().getStringExtra(CAMPAIGN_ID_KEY));
+		mCampaignIdEditText.setText("1197850970");
 
 		mEngagementIdEditText = findViewById(R.id.engagement_id);
-		mEngagementIdEditText.setText(getIntent().getStringExtra(ENGAGEMENT_ID_KEY));
+		// mEngagementIdEditText.setText(getIntent().getStringExtra(ENGAGEMENT_ID_KEY));
+		mEngagementIdEditText.setText("1222990170");
 
 		mSessionIdEditText = findViewById(R.id.session_id);
 		mSessionIdEditText.setText(getIntent().getStringExtra(SESSION_ID_KEY));
@@ -334,7 +351,38 @@ public class MessagingActivity extends AppCompatActivity {
 				.setCampaignInfo(campaignInfo)
 				.setReadOnlyMode(isReadOnly());
 //        setWelcomeMessage(params);  //This method sets the welcome message with quick replies. Uncomment this line to enable this feature.
-		LivePerson.showConversation(MessagingActivity.this, getLPAuthenticationParams(), params);
+
+		LPAuthenticationParams authParams = new LPAuthenticationParams(getAuthType());
+		authParams.setHostAppRedirectUri("https://rmaeda.au.auth0.com/authorize");
+
+		WebAuthProvider.login(auth0)
+				.withScheme("demo")
+				.withResponseType(CODE)
+				.withScope("openid email profile")
+				.withAudience(String.format("https://%s/userinfo", getString(R.string.com_auth0_domain)))
+				.start(this, new AuthCallback() {
+					@Override
+					public void onFailure(@NonNull Dialog dialog) {
+						Log.i(TAG, "WebAuthProvider onFailure1");
+
+					}
+
+					@Override
+					public void onFailure(AuthenticationException exception) {
+						Log.i(TAG, "WebAuthProvider onFailure2");
+					}
+
+					@Override
+					public void onSuccess(@NonNull Credentials credentials) {
+						Log.i(TAG, "WebAuthProvider succeed");
+						Log.i(TAG, "WebAuthProvider credentials.getType : " + credentials.getType());
+						Log.i(TAG, "WebAuthProvider credentials.getAccessToken : " + credentials.getAccessToken());
+						Log.i(TAG, "WebAuthProvider credentials.getIdToken : " + credentials.getIdToken());
+						authParams.setAuthKey(credentials.getAccessToken());
+						LivePerson.showConversation(MessagingActivity.this, authParams, params);
+					}
+				});
+
 
 		ConsumerProfile consumerProfile = new ConsumerProfile.Builder()
 				.setFirstName(mFirstNameView.getText().toString())
@@ -511,7 +559,8 @@ public class MessagingActivity extends AppCompatActivity {
 				authType = LPAuthenticationType.SIGN_UP;
 				break;
 		}
-		return authType;
+		// return authType;
+		return LPAuthenticationType.AUTH;
 	}
 
 	private void storeData() {

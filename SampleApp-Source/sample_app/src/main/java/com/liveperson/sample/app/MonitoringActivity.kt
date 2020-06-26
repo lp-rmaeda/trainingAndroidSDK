@@ -2,11 +2,12 @@ package com.liveperson.sample.app
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import com.auth0.android.Auth0
 import com.liveperson.monitoring.model.LPMonitoringIdentity
 import com.liveperson.monitoring.sdk.MonitoringParams
 import com.liveperson.monitoring.sdk.api.LivepersonMonitoring
@@ -19,6 +20,7 @@ import com.liveperson.sample.app.utils.SampleAppStorage
 import kotlinx.android.synthetic.main.activity_monitoring.*
 import org.json.JSONArray
 import org.json.JSONException
+
 
 class MonitoringActivity : AppCompatActivity() {
 
@@ -57,6 +59,7 @@ class MonitoringActivity : AppCompatActivity() {
         val sdkVersionTextView = findViewById<TextView>(R.id.sdk_version_text_view)
 
         entryPoinstsEditText = findViewById<EditText>(R.id.entry_points_edit_text)
+        entryPoinstsEditText?.setText("[\"android\"]")
         engagementAttributesEditText = findViewById<EditText>(R.id.engagement_attributes_edit_text)
 
         entryPoinstsEditText?.onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus -> changeHeight(view, hasFocus) }
