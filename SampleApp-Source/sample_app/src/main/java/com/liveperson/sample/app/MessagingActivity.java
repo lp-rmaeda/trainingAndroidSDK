@@ -144,11 +144,11 @@ public class MessagingActivity extends AppCompatActivity {
 
 		mCampaignIdEditText = findViewById(R.id.campaign_id);
 		// mCampaignIdEditText.setText(getIntent().getStringExtra(CAMPAIGN_ID_KEY));
-		mCampaignIdEditText.setText("1197850970");
+		mCampaignIdEditText.setText("1093387170");
 
 		mEngagementIdEditText = findViewById(R.id.engagement_id);
 		// mEngagementIdEditText.setText(getIntent().getStringExtra(ENGAGEMENT_ID_KEY));
-		mEngagementIdEditText.setText("1222990170");
+		mEngagementIdEditText.setText("1224733870");
 
 		mSessionIdEditText = findViewById(R.id.session_id);
 		mSessionIdEditText.setText(getIntent().getStringExtra(SESSION_ID_KEY));
@@ -357,7 +357,7 @@ public class MessagingActivity extends AppCompatActivity {
 
 		WebAuthProvider.login(auth0)
 				.withScheme("demo")
-				.withResponseType(CODE)
+				.withResponseType(ID_TOKEN)
 				.withScope("openid email profile")
 				.withAudience(String.format("https://%s/userinfo", getString(R.string.com_auth0_domain)))
 				.start(this, new AuthCallback() {
@@ -378,7 +378,7 @@ public class MessagingActivity extends AppCompatActivity {
 						Log.i(TAG, "WebAuthProvider credentials.getType : " + credentials.getType());
 						Log.i(TAG, "WebAuthProvider credentials.getAccessToken : " + credentials.getAccessToken());
 						Log.i(TAG, "WebAuthProvider credentials.getIdToken : " + credentials.getIdToken());
-						authParams.setAuthKey(credentials.getAccessToken());
+						authParams.setHostAppJWT(credentials.getIdToken());
 						LivePerson.showConversation(MessagingActivity.this, authParams, params);
 					}
 				});

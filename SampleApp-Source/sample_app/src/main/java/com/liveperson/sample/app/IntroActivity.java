@@ -43,9 +43,9 @@ public class IntroActivity extends AppCompatActivity {
 		Button logoutButton = findViewById(R.id.logout_button);
 
 		// mAccountIdEditText.setText(SampleAppStorage.getInstance(this).getAccount());
-		mAccountIdEditText.setText("33188187");
+		mAccountIdEditText.setText("87301551");
 		// mAppinstallidEditText.setText(SampleAppStorage.getInstance(this).getAppInstallId());
-		mAppinstallidEditText.setText("5aa277d4-ea08-445b-b610-4183d05f22f8");
+		mAppinstallidEditText.setText("b1026930-2fa4-4516-a5b7-e0c8df3edf8d");
 
 		// Messaging
 		messagingButton.setOnClickListener(new View.OnClickListener() {
