@@ -13,6 +13,7 @@ android {
         versionName "5.5.1"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [auth0Domain: "@string/com_auth0_domain", auth0Scheme: "@string/com_auth0_scheme"]
     }
     buildTypes {
         debug {
@@ -29,6 +30,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 }
 
 dependencies {
@@ -41,6 +46,8 @@ dependencies {
     testImplementation "junit:junit:4.12"
 
     implementation 'com.liveperson.android:lp_messaging_sdk:5.5.1'
+
+    implementation 'com.auth0.android:auth0:2.1.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
