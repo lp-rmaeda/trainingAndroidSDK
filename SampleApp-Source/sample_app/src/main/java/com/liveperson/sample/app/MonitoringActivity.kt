@@ -72,6 +72,7 @@ class MonitoringActivity : AppCompatActivity() {
         // Set values to editTests
         consumerIdEditText.setText(SampleAppStorage.getInstance(this).consumerId)
         pageIdEditText.setText(SampleAppStorage.getInstance(this).pageId)
+        entryPoinstsEditText?.setText("[\"android\"]")
 
         /////////////// Get Engagement ////////////////////////////
         getEngagementButton.setOnClickListener {
