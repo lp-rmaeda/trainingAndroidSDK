@@ -71,6 +71,8 @@ class MonitoringActivity : AppCompatActivity() {
 
         // Set values to editTests
         consumerIdEditText.setText(SampleAppStorage.getInstance(this).consumerId)
+        consumerIdEditText.setText("auth0|5d91bbac326dfe0dd96246e8");
+        val issuer : String = "https://rmaeda.au.auth0.com/"
         pageIdEditText.setText(SampleAppStorage.getInstance(this).pageId)
         entryPoinstsEditText?.setText("[\"android\"]")
 
@@ -83,7 +85,7 @@ class MonitoringActivity : AppCompatActivity() {
 
                 SampleAppStorage.getInstance(this@MonitoringActivity).consumerId = consumerIdFromUI
 
-                val identity = LPMonitoringIdentity(consumerIdFromUI)
+                val identity = LPMonitoringIdentity(consumerIdFromUI, issuer)
 
                 LivepersonMonitoring.getEngagement(this@MonitoringActivity, arrayListOf(identity), buildSde(false), object : EngagementCallback {
                     override fun onSuccess(lpEngagementResponse: LPEngagementResponse) {
