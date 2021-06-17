@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.FirebaseMessaging
 import com.huawei.agconnect.config.AGConnectServicesConfig
 import com.huawei.hms.aaid.HmsInstanceId
 import com.huawei.hms.common.ApiException
@@ -23,14 +23,14 @@ class PushRegistrationIntentService : IntentService(TAG) {
 		Log.d(TAG, "onHandleIntent: registering the token to pusher")
 
 		if (isGooglePlayServicesAvailable(this)) {
-			FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener(OnCompleteListener { task ->
+			FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
 				if (!task.isSuccessful) {
 					Log.w(TAG, "getInstanceId failed", task.exception)
 					return@OnCompleteListener
 				}
 
 				// Get new Instance ID token
-				val token = task.result!!.token
+				val token = task.result.toString()
 				registerLPPusher(baseContext, token, PushType.FCM)
 			})
 		} else if (isHuaweiServicesAvailable(this)) {

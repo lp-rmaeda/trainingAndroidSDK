@@ -36,5 +36,6 @@
     <string name="com_liveperson_application_id">b1026930-2fa4-4516-a5b7-e0c8df3edf8d</string>
     <string name="com_liveperson_campaign_id">1093387170</string>
     <string name="com_liveperson_engagement_id">1224733870</string>
+    <string name="com_liveperson_entry_point">["android"]</string>
 
 </resources>

@@ -29,8 +29,8 @@ class MonitoringActivity : AppCompatActivity() {
     private var entryPoinstsEditText: EditText? = null
     private var engagementAttributesEditText: EditText? = null
 
-    var currentCampaignId : String? = null
-    var currentEngagementId : String? = null
+    var currentCampaignId : String? = R.string.com_liveperson_campaign_id.toString()
+    var currentEngagementId : String? = R.string.com_liveperson_engagement_id.toString()
     var currentSessionId : String? = ""
     var currentVisitorId : String? = ""
     var currentEngagementContextId : String? = ""
