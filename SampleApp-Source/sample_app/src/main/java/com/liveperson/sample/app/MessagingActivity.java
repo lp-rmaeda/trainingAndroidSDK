@@ -129,10 +129,10 @@ public class MessagingActivity extends AppCompatActivity {
 		mReadOnlyModeCheckBox = findViewById(R.id.check_box_read_only);
 
 		mCampaignIdEditText = findViewById(R.id.campaign_id);
-		mCampaignIdEditText.setText(getIntent().getStringExtra(CAMPAIGN_ID_KEY));
+		mCampaignIdEditText.setText(getString(R.string.com_liveperson_campaign_id));
 
 		mEngagementIdEditText = findViewById(R.id.engagement_id);
-		mEngagementIdEditText.setText(getIntent().getStringExtra(ENGAGEMENT_ID_KEY));
+		mEngagementIdEditText.setText(getString(R.string.com_liveperson_engagement_id));
 
 		mSessionIdEditText = findViewById(R.id.session_id);
 		mSessionIdEditText.setText(getIntent().getStringExtra(SESSION_ID_KEY));

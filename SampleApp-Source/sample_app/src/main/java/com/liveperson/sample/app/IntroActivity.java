@@ -33,8 +33,8 @@ public class IntroActivity extends AppCompatActivity {
 		Button monitoringButton = findViewById(R.id.monitoring_button);
 		Button logoutButton = findViewById(R.id.logout_button);
 
-		mAccountIdEditText.setText(SampleAppStorage.getInstance(this).getAccount());
-		mAppinstallidEditText.setText(SampleAppStorage.getInstance(this).getAppInstallId());
+		mAccountIdEditText.setText(R.string.com_liveperson_account_id);
+		mAppinstallidEditText.setText(R.string.com_liveperson_application_id);
 
 		// Messaging
 		messagingButton.setOnClickListener(new View.OnClickListener() {

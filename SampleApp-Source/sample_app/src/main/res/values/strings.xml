@@ -29,4 +29,10 @@
 
     <string name="logout_failed" translatable="false">Logout Failed!</string>
 
+    <string name="com_liveperson_account_id">30320752</string>
+    <string name="com_liveperson_application_id">7ae43616-ffa2-4088-b62c-5c4f2d6e7fef</string>
+    <string name="com_liveperson_campaign_id">1379268070</string>
+    <string name="com_liveperson_engagement_id">1379268470</string>
+    <string name="com_liveperson_entry_point">[\"android\"]</string>
+
 </resources>
