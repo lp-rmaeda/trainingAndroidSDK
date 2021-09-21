@@ -23,6 +23,12 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.auth0.android.Auth0;
+import com.auth0.android.callback.Callback;
+import com.auth0.android.provider.WebAuthProvider;
+import com.auth0.android.authentication.AuthenticationException;
+import com.auth0.android.result.Credentials;
+
 import com.liveperson.infra.CampaignInfo;
 import com.liveperson.infra.ConversationViewParams;
 import com.liveperson.infra.ICallback;
@@ -38,6 +44,8 @@ import com.liveperson.messaging.sdk.api.model.ConsumerProfile;
 import com.liveperson.sample.app.notification.NotificationUI;
 import com.liveperson.sample.app.utils.SampleAppStorage;
 import com.liveperson.sample.app.utils.SampleAppUtils;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -80,10 +88,14 @@ public class MessagingActivity extends AppCompatActivity {
 	private boolean isFromPush;
 	private String notificationId;
 
+	private Auth0 auth0;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_messaging);
+
+		auth0 = new Auth0 (getString(R.string.com_auth0_client_id), getString((R.string.com_auth0_domain)));
 
 		initSampleAppViews();
 		initOpenConversationButton();
@@ -129,10 +141,10 @@ public class MessagingActivity extends AppCompatActivity {
 		mReadOnlyModeCheckBox = findViewById(R.id.check_box_read_only);
 
 		mCampaignIdEditText = findViewById(R.id.campaign_id);
-		mCampaignIdEditText.setText(getIntent().getStringExtra(CAMPAIGN_ID_KEY));
+		mCampaignIdEditText.setText(getString(R.string.com_liveperson_campaign_id));
 
 		mEngagementIdEditText = findViewById(R.id.engagement_id);
-		mEngagementIdEditText.setText(getIntent().getStringExtra(ENGAGEMENT_ID_KEY));
+		mEngagementIdEditText.setText(getString(R.string.com_liveperson_engagement_id));
 
 		mSessionIdEditText = findViewById(R.id.session_id);
 		mSessionIdEditText.setText(getIntent().getStringExtra(SESSION_ID_KEY));
@@ -312,7 +324,31 @@ public class MessagingActivity extends AppCompatActivity {
 				.setCampaignInfo(campaignInfo)
 				.setReadOnlyMode(isReadOnly());
 //        setWelcomeMessage(params);  //This method sets the welcome message with quick replies. Uncomment this line to enable this feature.
-		LivePerson.showConversation(MessagingActivity.this, SampleAppUtils.createLPAuthParams(this), params);
+		LPAuthenticationParams authParams = new LPAuthenticationParams(getAuthType());
+		authParams.setHostAppRedirectUri(String.format("https://%s/authorize", getString(R.string.com_auth0_domain)));
+
+		WebAuthProvider.login(auth0)
+				.withScheme(getString(R.string.com_auth0_scheme))
+				.withScope("openid profile email")
+				.withAudience(String.format("https://%s/api/v2/", getString(R.string.com_auth0_domain)))
+				.start(MessagingActivity.this, new Callback<Credentials, AuthenticationException>() {
+					@Override
+					public void onSuccess(Credentials credentials) {
+						Log.i(TAG, "WebAuthProvider succeed");
+						Log.i(TAG, "WebAuthProvider credentials.getType : " + credentials.getType());
+						Log.i(TAG, "WebAuthProvider credentials.getAccessToken : " + credentials.getAccessToken());
+						Log.i(TAG, "WebAuthProvider credentials.getIdToken : " + credentials.getIdToken());
+						authParams.setHostAppJWT(credentials.getIdToken());
+						LivePerson.showConversation(MessagingActivity.this, authParams, params);
+					}
+
+					@Override
+					public void onFailure(@NotNull AuthenticationException e) {
+						Log.i(TAG, "WebAuthProvider onFailure");
+					}
+				});
+
+		// LivePerson.showConversation(MessagingActivity.this, SampleAppUtils.createLPAuthParams(this), params);
 
 		ConsumerProfile consumerProfile = new ConsumerProfile.Builder()
 				.setFirstName(mFirstNameView.getText().toString())

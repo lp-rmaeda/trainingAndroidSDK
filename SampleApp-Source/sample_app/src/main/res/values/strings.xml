@@ -29,4 +29,13 @@
 
     <string name="logout_failed" translatable="false">Logout Failed!</string>
 
+    <string name="com_auth0_client_id">H1lgb5JC5pLuqTjNLY5U5P3duMiFul0I</string>
+    <string name="com_auth0_domain">rmaeda.au.auth0.com</string>
+    <string name="com_auth0_scheme">https</string>
+    <string name="com_liveperson_account_id">87301551</string>
+    <string name="com_liveperson_application_id">b1026930-2fa4-4516-a5b7-e0c8df3edf8d</string>
+    <string name="com_liveperson_campaign_id">1093387170</string>
+    <string name="com_liveperson_engagement_id">1224733870</string>
+    <string name="com_liveperson_entry_point">["android"]</string>
+
 </resources>

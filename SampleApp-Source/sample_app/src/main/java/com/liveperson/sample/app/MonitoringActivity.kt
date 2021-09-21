@@ -73,6 +73,10 @@ class MonitoringActivity : AppCompatActivity() {
         consumerIdEditText.setText(SampleAppStorage.getInstance(this).consumerId)
         pageIdEditText.setText(SampleAppStorage.getInstance(this).pageId)
 
+        consumerIdEditText.setText("auth0|5d91bbac326dfe0dd96246e8");
+        val issuer : String = "https://rmaeda.au.auth0.com/"
+        entryPoinstsEditText?.setText("[\"android\"]")
+
         /////////////// Get Engagement ////////////////////////////
         getEngagementButton.setOnClickListener {
 

@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.auth0.android.authentication.AuthenticationException;
+import com.auth0.android.callback.Callback;
 import com.liveperson.infra.InitLivePersonProperties;
 import com.liveperson.infra.MonitoringInitParams;
 import com.liveperson.infra.callbacks.InitLivePersonCallBack;
@@ -17,15 +19,25 @@ import com.liveperson.messaging.sdk.api.callbacks.LogoutLivePersonCallback;
 import com.liveperson.sample.app.utils.SampleAppStorage;
 import com.liveperson.sample.app.notification.NotificationUI;
 
+import com.auth0.android.Auth0;
+import com.auth0.android.Auth0Exception;
+import com.auth0.android.provider.WebAuthProvider;
+
+import org.jetbrains.annotations.NotNull;
+
 public class IntroActivity extends AppCompatActivity {
 
 	EditText mAccountIdEditText;
 	EditText mAppinstallidEditText;
 
+	private Auth0 auth0;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_intro);
+
+		auth0 = new Auth0 (getString(R.string.com_auth0_client_id), getString((R.string.com_auth0_domain)));
 
 		mAccountIdEditText = findViewById(R.id.account_id_edit_text);
 		mAppinstallidEditText = findViewById(R.id.appinstallid_edit_text);
@@ -33,8 +45,8 @@ public class IntroActivity extends AppCompatActivity {
 		Button monitoringButton = findViewById(R.id.monitoring_button);
 		Button logoutButton = findViewById(R.id.logout_button);
 
-		mAccountIdEditText.setText(SampleAppStorage.getInstance(this).getAccount());
-		mAppinstallidEditText.setText(SampleAppStorage.getInstance(this).getAppInstallId());
+		mAccountIdEditText.setText(getString(R.string.com_liveperson_account_id));
+		mAppinstallidEditText.setText(getString(R.string.com_liveperson_application_id));
 
 		// Messaging
 		messagingButton.setOnClickListener(new View.OnClickListener() {
@@ -117,6 +129,20 @@ public class IntroActivity extends AppCompatActivity {
 		logoutButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+
+			    WebAuthProvider.logout(auth0)
+						.withScheme(getString(R.string.com_auth0_scheme))
+                        .start(IntroActivity.this, new Callback<Void, AuthenticationException>() {
+							@Override
+							public void onSuccess(Void unused) {
+
+							}
+
+							@Override
+							public void onFailure(@NotNull AuthenticationException e) {
+
+							}
+						});
 
 				LivePerson.logOut(getApplicationContext(), SampleAppStorage.getInstance(IntroActivity.this).getAccount(), SampleAppStorage.SDK_SAMPLE_FCM_APP_ID,
 						new LogoutLivePersonCallback() {
